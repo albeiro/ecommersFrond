@@ -8,10 +8,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <html>
 
 <head>
-	<title>Free Adidas Website Template | Login :: w3layouts</title>
+	<title>Free Adidas Website Template | Single :: w3layouts</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+	<link href="css/form.css" rel="stylesheet" type="text/css" media="all" />
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 
@@ -20,6 +21,14 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	<script type="text/javascript" src="js/megamenu.js"></script>
 	<script>$(document).ready(function () { $(".megamenu").megamenu(); });</script>
 	<!-- end menu -->
+	<script type="text/javascript" src="js/jquery.jscrollpane.min.js"></script>
+
+	<!----details-product-slider--->
+	<!-- Include the Etalage files -->
+
+	<!-- Include the Etalage files -->
+
+	<!----//details-product-slider--->
 	<!-- top scrolling -->
 	<script type="text/javascript" src="js/move-top.js"></script>
 	<script type="text/javascript" src="js/easing.js"></script>
@@ -180,87 +189,112 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			<div class="clear"></div>
 		</div>
 	</div>
-	<div class="login">
+	<div class="single">
 		<div class="wrap">
-			<div class="col_1_of_login span_1_of_login">
-				<div class="login-title">
-					<h4 class="title">Registered Customers</h4>
-					<div class="comments-area">
-						<form id="form">
-							<p>
-								<label>Name</label>
-								<span id="lbuser">*</span>
-								<input id="user" type="text" value="">
-							</p>
-							<p>
-								<label>Password</label>
-								<span>*</span>
-								<input id="pass" type="password" value="">
-							</p>
 
-							<p>
-								<input id="login" type="button" value="Login">
-								<label class="error"></label>
-							</p>
-						</form>
-						<p id="pvalidate" style="display: none;">
-							<label>Validate</label>
-							<span>*</span>
-							<input id="validateCode" type="text" value="">
-						</p>
+			<div class="">
+
+				<div>
+					<div class="">
+						<h3 class="m_3 title"> </h3>
+						<div class="wrap photo"></div>
+						<a class="photo1"></a>
+					<a class="photo2"></a>
+					<a class="photo3"></a>
+
+
+
+						<div class="btn_form">
+							<form>
+								<input type="submit" value="buy now" title="">
+							</form>
+						</div>
+						<div class="price_single">
+							<span class="reducedfrom">$66.00</span>
+							<span class="actual">$12.00</span>
+						</div>
+						<ul class="add-to-links">
+							<li><span class="weight"> Kg</span> </li>
+						</ul>
+
+						<div></div>
+
 					</div>
+					
+					<p class="m_desc description"></p>
+
 				</div>
+
+				<div class="clear"></div>
+				<script type="text/javascript" src="js/jquery.flexisel.js"></script>
 			</div>
 			<div class="clear"></div>
+
+		</div>
+
+	</div>
+	<div class="footer">
+		<div class="copy">
+			<div class="wrap">
+				<p>© All rights reserved | Template by&nbsp;<a href="http://w3layouts.com/"> W3Layouts</a></p>
+			</div>
 		</div>
 	</div>
 	<script type="text/javascript">
-
-
+		var url = 'http://localhost/ecommerce/api/product/'
 		$(document).ready(function () {
-			var user = ''
+			var product_id = window.location.toString().split(['#id='])[1];
 
-			$('#login').click(function () {
-				 user = $('#user').val()
-				var pass = $('#pass').val()
-				var url = 'http://localhost/ecommerce/api/Login/' + user + '/' + pass
+			$.getJSON(url + product_id)
+				.done(function (data) {
 
-				// Send an AJAX request
-				$.getJSON(url)
-					.done(function (data) {
-						$('#form').hide()
-						$('#pvalidate').show()
-						console.info(data)
-					})
+					$('.title').html(data['Name'])
 
-					.fail(function (data) {
-						$('.error').text("Error: " + data.status)
-					})
+					$('.description').html(data['Description'])
+					$('.weight').before(data['Weight'])
+					//$('#price' ).append(data['Price'])
 
-			})
-
-			$('#validateCode').keyup(function (e) {
-				if ($('#validateCode').val().length == 6) {
+					var image = new Image();
+					image.src = data['Photo1'];
+					$('.photo').append(image);
+					$('.photo').children('img').css('width', '400px');
+					$('.photo').children('img').css('height', '400px');
 					
-					var url = 'http://localhost/ecommerce/api/Login/validate/' + user+'/'+$('#validateCode').val()
 
-					// Send an AJAX request
-					$.getJSON(url)
-						.done(function (data) {
-							alert("ingreso")
-						})
+					var image1 = new Image();
+					image1.src = data['Photo1'];
+					$('.photo1').append(image1);
+					$('.photo1').children('img').css('width', '100px');
+					$('.photo1').children('img').css('height', '100px');
+					$('.photo1').children('img').click(function () {
+						$('.photo').children('img').attr("src",image1.src )
+					})
 
-						.fail(function (data) {
-							$('.error').text("Error: " + data.status)
-						})
+					var image2 = new Image();
+					image2.src = data['Photo2'];
+					$('.photo2').append(image2);
+					$('.photo2').children('img').css('width', '100px');
+					$('.photo2').children('img').css('height', '100px');
+					$('.photo2').children('img').click(function () {
+						$('.photo').children('img').attr("src",image2.src )
+					})
 
-				}
+					var image3 = new Image();
+					image3.src = data['Photo3'];
+					$('.photo3').append(image3);
+					$('.photo3').children('img').css('width', '100px');
+					$('.photo3').children('img').css('height', '100px');
+					$('.photo3').children('img').click(function () {
+						$('.photo').children('img').attr("src",image3.src )
+					})
+
+				});
 
 
 
 
 
-			})
+
 		});
 	</script>
 	<a href="#" id="toTop" style="display: block;"><span id="toTopHover" style="opacity: 1;"></span></a>
