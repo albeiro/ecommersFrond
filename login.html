@@ -162,17 +162,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 								</div>
 							</div>
 							<div class="col1">
-								<div class="h_nav">
+								<div class="h_nav">ss
 									<img src="images/nav_img1.jpg" alt="" />
 								</div>
 							</div>
-						</div>
-						<div class="row">
-							<div class="col2"></div>
-							<div class="col1"></div>
-							<div class="col1"></div>
-							<div class="col1"></div>
-							<div class="col1"></div>
 						</div>
 					</div>
 				</li>
@@ -204,7 +197,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 							</p>
 						</form>
 						<p id="pvalidate" style="display: none;">
-							<label>Validate</label>
+							<label>Validate. Enter the 6 digits that appear in the console</label>
 							<span>*</span>
 							<input id="validateCode" type="text" value="">
 						</p>
@@ -221,7 +214,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			var user = ''
 
 			$('#login').click(function () {
-				 user = $('#user').val()
+				user = $('#user').val()
 				var pass = $('#pass').val()
 				var url = 'http://localhost/ecommerce/api/Login/' + user + '/' + pass
 
@@ -239,10 +232,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 			})
 
+			//Two factor authentication
 			$('#validateCode').keyup(function (e) {
 				if ($('#validateCode').val().length == 6) {
-					
-					var url = 'http://localhost/ecommerce/api/Login/validate/' + user+'/'+$('#validateCode').val()
+
+					var url = 'http://localhost/ecommerce/api/Login/validate/' + user + '/' + $('#validateCode').val()
 
 					// Send an AJAX request
 					$.getJSON(url)
@@ -253,13 +247,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 						.fail(function (data) {
 							$('.error').text("Error: " + data.status)
 						})
-
 				}
-
-
-
-
-
 			})
 		});
 	</script>
