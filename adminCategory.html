@@ -1,0 +1,209 @@
+<!--A Design by W3layouts
+Author: W3layout
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>New Category</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+
+
+
+    <!-- start menu -->
+    <link href="css/megamenu.css" rel="stylesheet" type="text/css" media="all" />
+    <script type="text/javascript" src="js/megamenu.js"></script>
+    <script>
+        $(document).ready(function() {
+            $(".megamenu").megamenu();
+        });
+    </script>
+    <!-- end menu -->
+    <!-- top scrolling -->
+    <script type="text/javascript" src="js/move-top.js"></script>
+    <script type="text/javascript" src="js/easing.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css" />
+
+    <script type="text/javascript" src="DataTables/datatables.min.js"></script>
+
+</head>
+
+<body>
+    <div class="header-top">
+        <div class="wrap">
+            <div class="logo">
+                <a href="index.html"><img src="images/logo.png" alt="" /></a>
+            </div>
+
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="header-bottom">
+        <div class="wrap">
+
+            <!-- start header menu -->
+            <ul class="megamenu skyblue">
+                <li><a class="color1" href="#">Home</a></li>
+            </ul>
+
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="register_account">
+        <div class="wrap ">
+            <h4 class="title">Create a Product</h4>
+
+            <form>
+                <div>
+                    <div><input type="text" id="Name" value="Name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Name';}"></div>
+                    <div><input type="text" id="Code" value="Code" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Code';}"></div>
+                    <div>
+                        <label>Photo</label><input type="file" id="filePhoto" class="fileLoad">
+                        <textarea id="Photo" style=" display: none;"></textarea>
+                    </div>
+                    <div><select id="father_id" name="father_id" class="frm-field required">
+                        <option value="null">Select a Category</option>
+                    </select></div>
+
+                    <div>
+                    </div>
+
+                    <label class="buttonGuardar">Submit</label>
+
+                    <div class="clear"></div>
+            </form>
+            </div>
+            <div class="clear"></div>
+            <div class="wrap">
+                <h4 class="title">All Product</h4>
+                <table id="allProduct" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Code</th>
+                            <th>Photo</th>
+                            <th>father_id</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="copy">
+                <div class="wrap">
+                    <p>© All rights reserved | Template by&nbsp;<a href="http://w3layouts.com/"> W3Layouts</a></p>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function() {
+
+                //load list Category
+                urlProduc = 'http://localhost/ecommerce/api/Category/categoryfather'
+                $.getJSON(urlProduc)
+                    .done(function(data) {
+                        $.each(data, function(key, item) {
+                            $('#father_id').append('<option value="' + item['Id'] + '">' + item['Name'] + ' </option>')
+                        })
+                    })
+
+                //Load table product Produc
+                urlProduc = 'http://localhost/ecommerce/api/Category'
+                $.getJSON(urlProduc)
+                    .done(function(data) {
+
+                        $.each(data, function(ey, item) {
+                            $('#allProduct').DataTable({
+                                "destroy": true,
+                                "data": data,
+                                "columns": [{
+                                    "data": "Id"
+                                }, {
+                                    "data": "Name"
+                                }, {
+                                    "data": "Code",
+
+                                }, {
+                                    "data": "Photo",
+                                    "render": function(data, type, row) {
+                                        return '<img style="max-width: 100px;" src="' + data + '">'
+                                    }
+                                }, {
+                                    "data": "father_id"
+                                }]
+                            });
+
+                        });
+                    });
+
+
+                $('.buttonGuardar').click(function() {
+
+                    var data;
+
+                    data = new FormData();
+                    data.append('Name', $('#Name').val());
+                    data.append('Code', $('#Code').val())
+                    data.append('Photo', $('#Photo').val())
+                    data.append('father_id', $('#father_id').children("option:selected").val())
+
+                    $.ajax({
+                        url: 'http://localhost/ecommerce/api/Category',
+                        data: data,
+                        processData: false,
+                        type: 'POST',
+                        contentType: false,
+                        success: function(data) {
+                            location.reload()
+                        }
+                    });
+
+                })
+
+
+                // Check for the File API support.
+                if (window.File && window.FileReader && window.FileList && window.Blob) {
+                    document.getElementById('filePhoto').addEventListener('change', handleFileSelect1, false);
+                } else {
+                    alert('The File APIs are not fully supported in this browser.');
+                }
+
+                function handleFileSelect1(evt) {
+                    var f = evt.target.files[0]; // FileList object
+                    nameLength = f['name'].split('.').length
+                    extensions = f['name'].split('.')[nameLength - 1]
+                    var reader = new FileReader();
+                    // Closure to capture the file information.
+                    reader.onload = (function(theFile) {
+                        return function(e) {
+                            var binaryData = e.target.result;
+                            //Converting Binary Data to base 64
+                            var base64String = window.btoa(binaryData);
+                            //showing file converted to base64
+                            document.getElementById('Photo').value = 'data:image/' + extensions + ';base64,' + base64String;
+                            //alert('File converted to base64 successfuly!\nCheck in Textarea');
+                        };
+                    })(f);
+                    // Read in the image file as a data URL.
+                    reader.readAsBinaryString(f);
+                }
+
+            });
+        </script>
+        <a href="#" id="toTop" style="display: block;"><span id="toTopHover" style="opacity: 1;"></span></a>
+</body>
+
+</html>
